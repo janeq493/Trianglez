@@ -1,0 +1,11 @@
+[package]
+name = "openGlTest2"
+version = "0.1.0"
+authors = ["jankus"]
+
+[dependencies]
+glfw = "*"
+gl = "*"
+image = "*"
+
+cgmath="*"
