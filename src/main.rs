@@ -24,6 +24,9 @@ use helpers::*;
 mod camera;
 use camera::Camera;
 
+mod mesh;
+use mesh::*;
+
 fn main() 
 {
     // load window and glfw
@@ -45,16 +48,16 @@ fn main()
     shader.build_program();
 
 
-    let verteces: [f32;6*5] =
-        [
-        -0.5,-0.5,-0.5,1.0,0.0,0.1,
-        -0.5,0.5,-0.5,0.0,1.0,0.3,
-        0.5,0.5,-0.5,0.3,0.1,1.0,
-        0.5,-0.5,-0.5,0.5,0.2,0.1,
-        0.,0.,0.5,1.0,0.0,0.7,
+    let verteces  =
+        vec![
+        vert { pos:vec3(-0.5,-0.5,-0.5) ,col:vec3(1.0,0.0,0.1) },
+        vert { pos:vec3(-0.5,0.5,-0.5),col:vec3(0.0,1.0,0.3) },
+        vert { pos:vec3(0.5,0.5,-0.5),col:vec3(0.3,0.1,1.0) },
+        vert { pos:vec3(0.5,-0.5,-0.5),col:vec3(0.5,0.2,0.1) },
+        vert { pos:vec3(0.,0.,0.5),col:vec3(1.0,0.0,0.7) },
         ];
-    let indices: [i32;3*6] =
-        [
+    let indices  =
+        vec![
         0,1,3,
         3,2,1,
         0,1,4,
@@ -62,45 +65,8 @@ fn main()
         2,3,4,
         3,0,4,
         ];
-    let VAO = unsafe
-    { 
-        // generate buffers and vao
-        let  (mut VBO, mut VAO, mut EBO) = (0,0,0);
-        gl::GenBuffers(1,&mut VBO);
-        gl::GenBuffers(1,&mut EBO);
-        gl::GenVertexArrays(1,&mut VAO);
-
-        gl::BindVertexArray(VAO);
-
-        gl::BindBuffer(gl::ARRAY_BUFFER,VBO);
-        gl::BufferData(gl::ARRAY_BUFFER,
-                       (verteces.len() * mem::size_of::<GLfloat>()) as GLsizeiptr,
-                       &verteces[0] as *const f32 as *const c_void,
-                       gl::STATIC_DRAW
-                      );
-
-        gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER,EBO);
-
-        gl::BufferData(gl::ELEMENT_ARRAY_BUFFER,
-                       (indices.len() * mem::size_of::<GLuint>()) as GLsizeiptr,
-                       &indices[0] as *const i32 as *const c_void,
-                       gl::STATIC_DRAW
-                      );
-        gl::VertexAttribPointer(0,3,gl::FLOAT,gl::FALSE,(6* mem::size_of::<GLfloat>()) as GLsizei, ptr::null());
-        gl::EnableVertexAttribArray(0);
-
-        gl::VertexAttribPointer(1,3,gl::FLOAT,gl::FALSE,(6* mem::size_of::<GLfloat>()) as GLsizei, (3* mem::size_of::<GLfloat>()) as *const c_void);
-        gl::EnableVertexAttribArray(1);
-
-
-
-        gl::BindBuffer(gl::ARRAY_BUFFER,0);
-
-        gl::BindVertexArray(0);
-
-        gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER,0);
-        VAO
-    };
+    let tetrahed = Mesh::new_color(verteces,indices);
+    
     let positions: [Vector3<f32>;4] =
         [
         vec3(3.0,-2.0,1.0),
@@ -128,11 +94,6 @@ fn main()
             // clear the screen
             gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
 
-            // load shader program create earlier
-            shader.use_prog();
-
-            gl::BindVertexArray(VAO);
-
             for (i,p) in positions.iter().enumerate()
             {
                 let model = Matrix4::from_translation(*p)
@@ -140,7 +101,8 @@ fn main()
                         
                 shader.set_mat4("mod_mat",&model);
 
-                gl::DrawElements(gl::TRIANGLES,verteces.len() as i32, gl::UNSIGNED_INT,ptr::null());
+                tetrahed.draw(&mut shader);
+
             }
         }
 
