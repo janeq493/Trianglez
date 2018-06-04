@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use self::gl::types::*;
 use gl;
 
@@ -39,7 +40,7 @@ impl Shader
         unsafe
         {
             
-            let mut shader = gl::CreateShader(shaderType);
+            let shader = gl::CreateShader(shaderType);
 
             gl::ShaderSource(shader,1,&CString::new(source.as_bytes()).expect("Failed to parse VertexShaderSource as cstring").as_ptr(),ptr::null());
 

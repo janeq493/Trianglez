@@ -1,12 +1,9 @@
 use cgmath::*;
-use cgmath::prelude::*;
-
 
 pub struct Camera
 {
     pos: Point3<f32>,
     dir: Vector3<f32>,
-    up: Vector3<f32>,
     lastx: f32,
     lasty: f32,
     yaw: f32,
@@ -14,13 +11,12 @@ pub struct Camera
 }
 impl Camera
 {
-    pub fn new(pos: Point3<f32>, dir: Vector3<f32>, up: Vector3<f32>) -> Camera
+    pub fn new(pos: Point3<f32>, dir: Vector3<f32>) -> Camera
     {
         Camera
         {
             pos: pos,
             dir: dir,
-            up: Vector3::new(0.0,1.0,0.0),
             lastx: 0.0,
             lasty: 0.0,
             yaw: -90.0,
@@ -29,7 +25,7 @@ impl Camera
     }
     pub fn get_view(&self) -> Matrix4<f32>
     {
-        Matrix4::look_at(self.pos,self.pos+self.dir,self.up)
+        Matrix4::look_at(self.pos,self.pos+self.dir,Vector3::new(0.0,1.0,0.0))
     }
     pub fn move_to(&mut self,key: u32)
     {
@@ -38,8 +34,8 @@ impl Camera
         {
             0 =>self.pos+=self.dir*spd,
             1 =>self.pos-=self.dir*spd,
-            2 =>self.pos-=self.dir.cross(self.up).normalize()*spd,
-            3 =>self.pos+=self.dir.cross(self.up).normalize()*spd,
+            2 =>self.pos-=self.dir.cross(Vector3::new(0.0,1.0,0.0)).normalize()*spd,
+            3 =>self.pos+=self.dir.cross(Vector3::new(0.0,1.0,0.0)).normalize()*spd,
             _ => ()
         }
 

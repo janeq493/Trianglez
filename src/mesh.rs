@@ -1,13 +1,11 @@
-use std::ffi::CString;
-use std::mem::size_of;
 use std::os::raw::c_void;
 use std::ptr;
 use std::mem;
 
-use cgmath::{ Vector3, Vector2 };
+use cgmath::Vector3;
 use cgmath::prelude::*;
-use gl;
 
+use gl;
 use self::gl::types::*;
 
 use shader::Shader;
@@ -31,6 +29,7 @@ impl Default for vert
     }
 }
 
+#[allow(non_snake_case)]
 pub struct Mesh
 {
     vertices: Vec<vert>,

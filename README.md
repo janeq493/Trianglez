@@ -1,1 +1,1 @@
-Just bunch of triangles.
+Just a bunch of triangles.
