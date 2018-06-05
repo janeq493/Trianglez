@@ -24,7 +24,7 @@ impl Default for vert
         vert 
         {
             pos: Vector3::zero(),
-            col: Vector3::zero(),
+            col: Vector3::new(1.0,1.0,1.0),
         }
     }
 }

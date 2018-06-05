@@ -29,8 +29,8 @@ fn main()
     // creata shader program and add shaders
     let mut shader = Shader::new();
     
-    shader.add_shader("shaders/vs.glsl",gl::VERTEX_SHADER);
-    shader.add_shader("shaders/fs.glsl",gl::FRAGMENT_SHADER);
+    shader.add_shader("shaders/simple/vs.glsl",gl::VERTEX_SHADER);
+    shader.add_shader("shaders/simple/fs.glsl",gl::FRAGMENT_SHADER);
     shader.build_program();
 
     // verteces of figure to be rendered
@@ -54,6 +54,35 @@ fn main()
         ];
     // create mesh for tetrahedron from previously defined verteces
     let tetrahed = Mesh::new_color(verteces,indices);
+
+    let verteces2 =
+        vec![
+        vert { pos:vec3(-0.5,-0.5,-0.5)  , ..Default::default() },
+        vert { pos:vec3(-0.5,0.5,-0.5) , ..Default::default() },
+        vert { pos:vec3(0.5,0.5,-0.5) , ..Default::default() },
+        vert { pos:vec3(0.5,-0.5,-0.5) , ..Default::default() },
+        vert { pos:vec3(-0.5,-0.5,0.5)  , ..Default::default() },
+        vert { pos:vec3(-0.5,0.5,0.5) , ..Default::default() },
+        vert { pos:vec3(0.5,0.5,0.5), ..Default::default()  },
+        vert { pos:vec3(0.5,-0.5,0.5), ..Default::default() },
+        ];
+    let indices2 =
+        vec![
+        0,1,2,
+        2,3,0,
+        0,4,1,
+        1,5,4,
+        5,1,2,
+        2,6,5,
+        2,6,7,
+        7,3,2,
+        3,0,4,
+        4,7,3,
+        4,5,6,
+        6,7,4,
+        ];
+    let cube = Mesh::new(verteces2,indices);
+        
     
     let positions: [Vector3<f32>;4] =
         [
@@ -104,6 +133,10 @@ fn main()
                 // draw the figure
                 tetrahed.draw(&mut shader);
             }
+            let model = Matrix4::from_translation(vec3(3.0,3.0,3.0));
+            shader.set_mat4("mod_mat",&model);
+
+            cube.draw(&mut shader);
         }
         // swap the output buffer that has been used to draw during this iteration to the screen
         window.swap_buffers();

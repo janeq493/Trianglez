@@ -346,16 +346,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "openGlTest2"
-version = "0.1.0"
-dependencies = [
- "cgmath 0.16.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "gl 0.10.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "glfw 0.23.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "image 0.19.0 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "png"
 version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -444,6 +434,16 @@ dependencies = [
  "proc-macro2 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "unicode-xid 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "trianglez"
+version = "0.1.0"
+dependencies = [
+ "cgmath 0.16.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gl 0.10.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "glfw 0.23.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "image 0.19.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
