@@ -88,7 +88,7 @@ impl Mesh
         gl::EnableVertexAttribArray(0);
         if color
         {
-            gl::VertexAttribPointer(1,3,gl::FLOAT,gl::FALSE,(mem::size_of::<vert>()) as GLsizei, (mem::size_of::<vert>()) as *const c_void);
+            gl::VertexAttribPointer(1,3,gl::FLOAT,gl::FALSE,(mem::size_of::<vert>()) as GLsizei, (mem::size_of::<vert>()/2) as *const c_void);
             gl::EnableVertexAttribArray(1);
         }
 
