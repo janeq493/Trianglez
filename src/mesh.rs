@@ -2,7 +2,7 @@ use std::os::raw::c_void;
 use std::ptr;
 use std::mem;
 
-use cgmath::Vector3;
+use cgmath::{Vector3,Vector2};
 use cgmath::prelude::*;
 
 use gl;
@@ -14,7 +14,8 @@ use shader::Shader;
 pub struct vert
 {
     pub pos: Vector3<f32>,
-    pub col: Vector3<f32>,
+    pub norm:Vector3<f32>,
+    //pub tex: Vector2<f32>,
 }
 
 impl Default for vert
@@ -24,7 +25,8 @@ impl Default for vert
         vert 
         {
             pos: Vector3::zero(),
-            col: Vector3::new(1.0,1.0,1.0),
+            norm: Vector3::zero(),
+            //tex: Vector2::zero(),
         }
     }
 }
@@ -33,7 +35,7 @@ impl Default for vert
 pub struct Mesh
 {
     vertices: Vec<vert>,
-    indices: Vec<i32>,
+    indices: Vec<u32>,
     VAO: u32,
     VBO:u32,
     EBO:u32,
@@ -41,28 +43,19 @@ pub struct Mesh
 
 impl Mesh
 {
-    pub fn new(vertices: Vec<vert>,indices: Vec<i32>) -> Mesh
+    pub fn new(vertices: Vec<vert>,indices: Vec<u32>) -> Mesh
     {
         let mut mesh = Mesh 
         {
             vertices, indices,
             VAO:0,VBO:0,EBO:0,
         };
-        unsafe { mesh.setup(false) };
+        unsafe { mesh.setup() };
         mesh
     }
 
-    pub fn new_color(vertices: Vec<vert>,indices: Vec<i32>) -> Mesh
-    {
-        let mut mesh = Mesh 
-        {
-            vertices, indices,
-            VAO:0,VBO:0,EBO:0,
-        };
-        unsafe { mesh.setup(true) };
-        mesh
-    }
-    unsafe fn setup(&mut self,color: bool)
+    
+    unsafe fn setup(&mut self)
     {
         gl::GenBuffers(1,&mut self.VBO);
         gl::GenBuffers(1,&mut self.EBO);
@@ -79,19 +72,19 @@ impl Mesh
         gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER,self.EBO);
 
         gl::BufferData(gl::ELEMENT_ARRAY_BUFFER,
-                       (self.indices.len() * mem::size_of::<i32>()) as isize,
-                       &self.indices[0] as *const i32 as *const c_void,
+                       (self.indices.len() * mem::size_of::<u32>()) as isize,
+                       &self.indices[0] as *const u32 as *const c_void,
                        gl::STATIC_DRAW
                       );
 
         gl::VertexAttribPointer(0,3,gl::FLOAT,gl::FALSE,(mem::size_of::<vert>()) as GLsizei, ptr::null());
         gl::EnableVertexAttribArray(0);
-        if color
-        {
-            gl::VertexAttribPointer(1,3,gl::FLOAT,gl::FALSE,(mem::size_of::<vert>()) as GLsizei, (mem::size_of::<vert>()/2) as *const c_void);
-            gl::EnableVertexAttribArray(1);
-        }
+        
+        gl::VertexAttribPointer(1,3,gl::FLOAT,gl::FALSE,(mem::size_of::<vert>()) as GLsizei, (mem::size_of::<vert>()/2) as *const c_void);
+        gl::EnableVertexAttribArray(1);
 
+        //gl::VertexAttribPointer(2,2,gl::FLOAT,gl::FALSE,(mem::size_of::<vert>()) as GLsizei, (mem::size_of::<Vector3<f32>>()*2) as *const c_void);
+        //gl::EnableVertexAttribArray(2);
 
 
         gl::BindBuffer(gl::ARRAY_BUFFER,0);
