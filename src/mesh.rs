@@ -15,7 +15,7 @@ pub struct vert
 {
     pub pos: Vector3<f32>,
     pub norm:Vector3<f32>,
-    //pub tex: Vector2<f32>,
+    pub tex: Vector2<f32>,
 }
 
 impl Default for vert
@@ -26,7 +26,7 @@ impl Default for vert
         {
             pos: Vector3::zero(),
             norm: Vector3::zero(),
-            //tex: Vector2::zero(),
+            tex: Vector2::zero(),
         }
     }
 }
@@ -83,8 +83,8 @@ impl Mesh
         gl::VertexAttribPointer(1,3,gl::FLOAT,gl::FALSE,(mem::size_of::<vert>()) as GLsizei, (mem::size_of::<vert>()/2) as *const c_void);
         gl::EnableVertexAttribArray(1);
 
-        //gl::VertexAttribPointer(2,2,gl::FLOAT,gl::FALSE,(mem::size_of::<vert>()) as GLsizei, (mem::size_of::<Vector3<f32>>()*2) as *const c_void);
-        //gl::EnableVertexAttribArray(2);
+        gl::VertexAttribPointer(2,2,gl::FLOAT,gl::FALSE,(mem::size_of::<vert>()) as GLsizei, (mem::size_of::<Vector3<f32>>()*2) as *const c_void);
+        gl::EnableVertexAttribArray(2);
 
 
         gl::BindBuffer(gl::ARRAY_BUFFER,0);

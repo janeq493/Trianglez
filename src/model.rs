@@ -36,14 +36,28 @@ impl Model
             let nov = mesh.positions.len()/3;
             for i in 0..nov
             {
-            println!("{}",nov);
                 vertices.push( vert 
                                {
-                                   pos: vec3(pos[i],pos[i+1],pos[i+2]),
-                                   norm: vec3(norm[i],norm[i+1],norm[i+2]),
-                                   //tex: vec2(tex[i],tex[i+1])
+                                   pos: vec3(pos[i*3],pos[i*3+1],pos[i*3+2]),
+                                   norm: vec3(norm[i*3],norm[i*3+1],norm[i*3+2]),
+                                   tex: vec2(tex[i*2],tex[i*2+1])
                                } );
             }
+            
+            if let Some(mat_id) = mesh.material_id
+            {
+                let material = &materials[mat_id];
+                println!("{}",materials.len());
+                if !material.dissolve_texture.is_empty()
+                {
+                    println!("test");
+                }
+                
+            }
+
+
+
+
             self.meshes.push(Mesh::new(vertices,indices));
 
         }
